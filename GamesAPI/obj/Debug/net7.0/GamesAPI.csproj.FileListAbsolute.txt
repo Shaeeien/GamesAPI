@@ -1,0 +1,7 @@
+E:\dotNETProjekty\GamesAPI\GamesAPI\GamesAPI\obj\Debug\net7.0\GamesAPI.csproj.AssemblyReference.cache
+E:\dotNETProjekty\GamesAPI\GamesAPI\GamesAPI\obj\Debug\net7.0\GamesAPI.GeneratedMSBuildEditorConfig.editorconfig
+E:\dotNETProjekty\GamesAPI\GamesAPI\GamesAPI\obj\Debug\net7.0\GamesAPI.AssemblyInfoInputs.cache
+E:\dotNETProjekty\GamesAPI\GamesAPI\GamesAPI\obj\Debug\net7.0\GamesAPI.AssemblyInfo.cs
+E:\dotNETProjekty\GamesAPI\GamesAPI\GamesAPI\obj\Debug\net7.0\GamesAPI.csproj.CoreCompileInputs.cache
+E:\dotNETProjekty\GamesAPI\GamesAPI\GamesAPI\obj\Debug\net7.0\GamesAPI.MvcApplicationPartsAssemblyInfo.cs
+E:\dotNETProjekty\GamesAPI\GamesAPI\GamesAPI\obj\Debug\net7.0\GamesAPI.MvcApplicationPartsAssemblyInfo.cache

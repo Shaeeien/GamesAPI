@@ -1,0 +1,138 @@
+body {
+  margin: 0;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.navbar{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+  width: 100%;
+  height: 50px;
+  font-family: "Sofia", sans-serif;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+
+.navbar-li{
+  float: left;
+}
+
+.navbar-li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-family: "Sofia", sans-serif;
+}
+.navbar-li a:hover{
+  background-color: #111;
+} 
+
+.footer{
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 5%;
+  background-color: #333;
+  color: white;
+  text-align: center;
+  font-family: "Sofia", sans-serif;
+}
+
+#formLabel{
+  text-align: center;
+}
+
+input[type=button], input[type=submit], input[type=reset] {
+  background-color: #04AA6D;
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+  width: 100%;
+}
+
+input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover {
+  background-color: #089a51;
+}
+
+.formInput{
+  width: 100%;
+  height: 30px;
+  resize: none;
+}
+
+.formTextArea{
+  width: 100%;
+  height: 100px;
+  resize: none;
+}
+
+.formInput:focus, textarea:focus{
+  width: 100%;
+  background-color:azure;
+  border: 3px solid #555;
+}
+
+.content{
+  background-color: #aba9a6;
+  width: 85%;
+  height: 860px;
+  float: left;
+  font-family: "Sofia", sans-serif;
+  padding: 0;
+  overflow-y: scroll;
+}
+
+.sidenav{
+  height: 860px;
+  width: 15%;
+  top: 50px;
+  background-color: #133;
+  overflow: hidden;
+  float: left;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+#gamesarea{
+  resize: none;
+  margin: 10px;
+  width: 80%;
+}
+
+#registerform, #loginform, #addgameform, #addproducerform{
+  float: left;
+  margin: 10px;
+  width: 80%;
+}
