@@ -97,8 +97,6 @@ namespace GamesAPI.Controllers
             }
             return Unauthorized();
         }
-
-
     }
 }
 

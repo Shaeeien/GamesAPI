@@ -29,10 +29,10 @@ namespace GamesAPI.Services
                 var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
                 var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
                 var claims = new List<Claim>
-            {
-                new Claim("id", userInfo.Id.ToString()),
-                new Claim(ClaimTypes.Name, userInfo.UserName.ToString())
-            };
+                {
+                    new Claim("id", userInfo.Id.ToString()),
+                    new Claim(ClaimTypes.Name, userInfo.UserName.ToString())
+                };
                 foreach (IdentityRole<int> role in userRoles)
                 {
                     if (role.Name != null)
