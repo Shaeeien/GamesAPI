@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
-using GamesAPI.DTOs;
+using GamesAPI.DTOs.User;
 
 namespace GamesAPI.Validators
 {

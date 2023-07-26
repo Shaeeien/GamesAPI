@@ -1,4 +1,4 @@
-﻿using GamesAPI.DTOs;
+﻿using GamesAPI.DTOs.Auth;
 using GamesAPI.Models;
 using GamesAPI.Responses;
 using Microsoft.AspNetCore.Identity;
@@ -83,7 +83,7 @@ namespace GamesAPI.Services
             }
         }
 
-        public AuthenticationResponse? RefreshToken(RefreshTokenDTO dto)
+        public async Task<AuthenticationResponse?> RefreshToken(RefreshTokenDTO dto)
         {
             if (dto is null)
             {
@@ -94,7 +94,7 @@ namespace GamesAPI.Services
                 var principal = GetPrincipalFromToken(dto.Token);
                 var userName = principal.Identity.Name;
 
-                var user = _userService.FindByName(userName);
+                var user = await _userService.FindByName(userName);
                 var roles = _userService.GetRolesByUser(user);
 
                 if (user != null)
@@ -108,7 +108,7 @@ namespace GamesAPI.Services
                     
                     user.TokenCreatedAt = DateTime.Now;
                     user.Expires = DateTime.Now.AddDays(7);
-                    _userService.SaveChanges();
+                    await _userService.SaveChanges();
                     return new AuthenticationResponse()
                     {
                         Token = newToken,

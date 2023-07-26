@@ -1,6 +1,8 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using GamesAPI.DTOs;
+using GamesAPI.DTOs.Roles;
+using GamesAPI.DTOs.User;
+using GamesAPI.DTOs.UserRoles;
 using GamesAPI.Models;
 using GamesAPI.Services;
 using GamesAPI.Validators;
@@ -26,6 +28,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserRolesService, UserRolesService>();
+builder.Services.AddScoped<IGamesService, GamesService>();
 builder.Services.AddControllers();
 builder.Services.AddFluentValidationAutoValidation();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

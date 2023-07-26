@@ -1,4 +1,4 @@
-﻿using GamesAPI.DTOs;
+﻿using GamesAPI.DTOs.Auth;
 using GamesAPI.Models;
 using GamesAPI.Responses;
 using Microsoft.AspNetCore.Identity;
@@ -15,7 +15,7 @@ namespace GamesAPI.Services
         public string GenerateJSONWebToken(AppUser userInfo, List<IdentityRole<int>> userRoles);        
         public bool RemoveJWT(AppUser user);
         public bool IsTokenActive(string token);
-        public AuthenticationResponse? RefreshToken(RefreshTokenDTO dto);
+        public Task<AuthenticationResponse?> RefreshToken(RefreshTokenDTO dto);
         public string GenerateRefreshTokenString();
         public bool ValidateToken(string token);
         public bool RefreshToken(string token, string refreshToken);

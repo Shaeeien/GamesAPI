@@ -1,4 +1,4 @@
-﻿using GamesAPI.DTOs;
+﻿using GamesAPI.DTOs.UserRoles;
 using GamesAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

@@ -1,4 +1,4 @@
-﻿using GamesAPI.DTOs;
+﻿using GamesAPI.DTOs.Auth;
 using GamesAPI.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -20,9 +20,9 @@ namespace GamesAPI.Services
             _configuration = configuration;
         }
 
-        public bool Login(LoginDTO dto)
+        public async Task<bool> Login(LoginDTO dto)
         {
-            IdentityUser<int>? user = _userService.FindByEmail(dto.Email);
+            IdentityUser<int>? user = await _userService.FindByEmail(dto.Email);
             if(user != null && BC.Verify(dto.Password, user.PasswordHash))
                 return true;
             return false;

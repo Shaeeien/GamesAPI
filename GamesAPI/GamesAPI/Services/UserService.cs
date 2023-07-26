@@ -1,5 +1,6 @@
 ﻿using GamesAPI.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace GamesAPI.Services
 {
@@ -10,11 +11,11 @@ namespace GamesAPI.Services
             _authContext = ctx;
         }
 
-        public bool Add(AppUser userToAdd)
+        public async Task<bool> Add(AppUser userToAdd)
         {
             try
             {
-                _authContext.Users.Add(userToAdd);
+                await _authContext.Users.AddAsync(userToAdd);
                 _authContext.SaveChanges();
                 return true;
             }
@@ -25,35 +26,35 @@ namespace GamesAPI.Services
             
         }
 
-        public AppUser? FindById(int id)
+        public async Task<AppUser?> FindById(int id)
         {
-            return _authContext.Users.Where(u => u.Id == id).FirstOrDefault();
+            return await _authContext.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
         }
 
-        public AppUser? FindByEmail(string email)
+        public async Task<AppUser?> FindByEmail(string email)
         {
-            return _authContext.Users.Where(u => u.Email == email).FirstOrDefault();
+            return await _authContext.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
         }
 
-        public bool Remove(AppUser userToRemove)
+        public async Task<bool> Remove(AppUser userToRemove)
         {
             var removedUser = _authContext.Users.Remove(userToRemove);
             if(removedUser != null)
             {
-                _authContext.SaveChanges();
+                await _authContext.SaveChangesAsync();
                 return true;
             }
             return false;
         }
 
-        public bool Update(AppUser userToUpdate, AppUser updatedUser)
+        public async Task<bool> Update(AppUser userToUpdate, AppUser updatedUser)
         {
             try
             {
                 userToUpdate.UserName = updatedUser.UserName;
                 userToUpdate.Email = updatedUser.Email;
                 userToUpdate.PasswordHash = updatedUser.PasswordHash;
-                _authContext.SaveChanges();
+                await _authContext.SaveChangesAsync();
                 return true;
             }
             catch
@@ -78,12 +79,12 @@ namespace GamesAPI.Services
             return roles;
         }
 
-        public List<AppUser> GetAllUsers()
+        public async Task<List<AppUser>> GetAllUsers()
         {
-            return _authContext.Users.ToList();
+            return await _authContext.Users.ToListAsync();
         }
 
-        public bool GenerateRefreshToken(AppUser user, string token, int days)
+        public async Task<bool> GenerateRefreshToken(AppUser user, string token, int days)
         {
             if(user != null)
             {
@@ -92,7 +93,7 @@ namespace GamesAPI.Services
                     user.RefreshToken = token;
                     user.Expires = DateTime.Now.AddDays(days);
                     user.TokenCreatedAt = DateTime.Now;
-                    _authContext.SaveChanges();
+                    await _authContext.SaveChangesAsync();
                     return true;
                 }
                 catch
@@ -103,14 +104,14 @@ namespace GamesAPI.Services
             return false;
         }
 
-        public AppUser? FindByName(string name)
+        public async Task<AppUser?> FindByName(string name)
         {
-            return _authContext.Users.Where(u => u.UserName == name).FirstOrDefault();
+            return await _authContext.Users.Where(u => u.UserName == name).FirstOrDefaultAsync();
         }
 
-        public int SaveChanges()
+        public async Task<int> SaveChanges()
         {
-            return _authContext.SaveChanges();
+            return await _authContext.SaveChangesAsync();
         }
 
         public bool Exists(AppUser user)

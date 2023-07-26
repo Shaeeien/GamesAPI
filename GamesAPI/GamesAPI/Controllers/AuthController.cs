@@ -1,4 +1,4 @@
-﻿using GamesAPI.DTOs;
+﻿using GamesAPI.DTOs.Auth;
 using GamesAPI.Models;
 using GamesAPI.Responses;
 using GamesAPI.Services;
@@ -22,11 +22,11 @@ namespace GamesAPI.Controllers
             _tokenService = tokenService;
         }
         [HttpPost("login")]
-        public ActionResult LogIn(LoginDTO dto)
+        public async Task<ActionResult> LogIn(LoginDTO dto)
         {
-            if (_authService.Login(dto))
+            if (await _authService.Login(dto))
             {
-                AppUser? userData = _userService.FindByEmail(dto.Email);
+                AppUser? userData = await _userService.FindByEmail(dto.Email);
                 if (userData != null)
                 {
                     try
@@ -37,7 +37,7 @@ namespace GamesAPI.Controllers
                         if (userData.Expires < DateTime.Now)
                         {
                             refreshToken = _tokenService.GenerateRefreshTokenString();
-                            _userService.GenerateRefreshToken(userData, refreshToken, 7);
+                            await _userService.GenerateRefreshToken(userData, refreshToken, 7);
                             Response.Cookies.Append("refreshToken", refreshToken);
                             return Ok(new AuthenticationResponse
                             {
@@ -67,13 +67,13 @@ namespace GamesAPI.Controllers
         }
 
         [HttpPost("refresh")]
-        public ActionResult RefreshToken(RefreshTokenDTO dto)
+        public async Task<ActionResult> RefreshToken(RefreshTokenDTO dto)
         {
             if (dto == null)
                 return BadRequest("Dto parameters are null");
             try
             {
-                AuthenticationResponse? response = _tokenService.RefreshToken(dto);
+                AuthenticationResponse? response = await _tokenService.RefreshToken(dto);
                 if (response != null)
                 {
                     return Ok(response);

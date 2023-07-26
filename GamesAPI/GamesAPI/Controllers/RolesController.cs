@@ -1,4 +1,4 @@
-﻿using GamesAPI.DTOs;
+﻿using GamesAPI.DTOs.Roles;
 using GamesAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -18,7 +18,7 @@ namespace GamesAPI.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost("add")]
-        public ActionResult Add(AddRoleDTO dto)
+        public async Task<ActionResult> Add(AddRoleDTO dto)
         {
             IdentityRole<int> role = new IdentityRole<int>()
             {
@@ -26,23 +26,23 @@ namespace GamesAPI.Controllers
             };
             if (_roleService.Exists(role))
                 return Conflict("Role already exists");
-            if(_roleService.Add(role))
+            if(await _roleService.Add(role))
                 return Ok();
             return BadRequest();
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPatch("update/{id}")]
-        public ActionResult Update(int id, [FromBody]AddRoleDTO dto)
+        public async Task<ActionResult> Update(int id, [FromBody]AddRoleDTO dto)
         {
-            IdentityRole<int>? roleToEdit = _roleService.FindById(id);
+            IdentityRole<int>? roleToEdit = await _roleService.FindById(id);
             if(roleToEdit != null)
             {
                 IdentityRole<int> updatedRole = new IdentityRole<int>
                 {
                     Name = dto.Name
                 };
-                if (_roleService.Update(roleToEdit, updatedRole))
+                if (await _roleService.Update(roleToEdit, updatedRole))
                 {
                     return Ok();
                 }
@@ -52,12 +52,12 @@ namespace GamesAPI.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("delete/{id}")]
-        public ActionResult Remove(int id) 
+        public async Task<ActionResult> Remove(int id) 
         {
-            var roleToRemove = _roleService.FindById(id);
+            var roleToRemove = await _roleService.FindById(id);
             if(roleToRemove != null)
             {
-                if (_roleService.Remove(roleToRemove))
+                if (await _roleService.Remove(roleToRemove))
                     return Ok();
             }
             else

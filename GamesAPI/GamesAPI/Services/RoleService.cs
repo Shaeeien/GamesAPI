@@ -12,12 +12,12 @@ namespace GamesAPI.Services
             _authContext = ctx;
         }
 
-        public bool Add(IdentityRole<int> roleToAdd)
+        public async Task<bool> Add(IdentityRole<int> roleToAdd)
         {
             try
             {
-                _authContext.Roles.Add(roleToAdd);
-                _authContext.SaveChanges();
+                await _authContext.Roles.AddAsync(roleToAdd);
+                await _authContext.SaveChangesAsync();
                 return true;
             }
             catch
@@ -32,14 +32,14 @@ namespace GamesAPI.Services
             return _authContext.UserRoles.Where(r => r.Equals(role)).FirstOrDefault() != null;
         }
 
-        public IdentityRole<int>? FindById(int id)
+        public async Task<IdentityRole<int>?> FindById(int id)
         {
-            return _authContext.Roles.Where(r => r.Id == id).FirstOrDefault();
+            return await _authContext.Roles.Where(r => r.Id == id).FirstOrDefaultAsync();
         }
 
-        public IdentityRole<int>? FindByName(string name)
+        public async Task<IdentityRole<int>?> FindByName(string name)
         {
-            return _authContext.Roles.Where(r => r.Name == name).FirstOrDefault();
+            return await _authContext.Roles.Where(r => r.Name == name).FirstOrDefaultAsync();
         }
 
         public List<IdentityRole<int>> GetAll()
@@ -47,23 +47,23 @@ namespace GamesAPI.Services
             return _authContext.Roles.ToList();
         }
 
-        public bool Remove(IdentityRole<int> roleToRemove)
+        public async Task<bool> Remove(IdentityRole<int> roleToRemove)
         {
             var removedRole = _authContext.Roles.Remove(roleToRemove);
             if(removedRole != null)
             {
-                _authContext.SaveChanges();
+                await _authContext.SaveChangesAsync();
                 return true;
             }
             return false;
         }
 
-        public bool Update(IdentityRole<int> roleToUpdate, IdentityRole<int> updatedRole)
+        public async Task<bool> Update(IdentityRole<int> roleToUpdate, IdentityRole<int> updatedRole)
         {
             try
             {
                 roleToUpdate.Name = updatedRole.Name;
-                _authContext.SaveChanges();
+                await _authContext.SaveChangesAsync();
                 return true;
             }
             catch

@@ -1,4 +1,4 @@
-﻿namespace GamesAPI.DTOs
+﻿namespace GamesAPI.DTOs.Roles
 {
     public class AddRoleDTO
     {

@@ -1,4 +1,4 @@
-﻿using GamesAPI.DTOs;
+﻿using GamesAPI.DTOs.User;
 using GamesAPI.Models;
 using GamesAPI.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -35,7 +35,7 @@ namespace GamesAPI.Controllers
                     try                   
                     {
                         _userService.Add(userToAdd);
-                        return Ok("User created successfuly");
+                        return Created("https://localhost:7054/api/user/register", userToAdd);
                     }
                     catch
                     {
@@ -51,14 +51,14 @@ namespace GamesAPI.Controllers
         }
 
         [HttpDelete("remove/{id}")]
-        public ActionResult RemoveUserById(int id)
+        public async Task<ActionResult> RemoveUserById(int id)
         {
             if (ModelState.IsValid)
             {
-                var userToRemove = _userService.FindById(id);
+                var userToRemove = await _userService.FindById(id);
                 if (userToRemove != null)
                 {
-                    if (_userService.Remove(userToRemove))
+                    if (await _userService.Remove(userToRemove))
                     {
                         return Ok();
                     }
@@ -69,11 +69,11 @@ namespace GamesAPI.Controllers
         }
 
         [HttpPatch("update/{id}")]
-        public ActionResult UpdateUser(int id, [FromBody]UpdateUserDTO dto)
+        public async Task<ActionResult> UpdateUser(int id, [FromBody]UpdateUserDTO dto)
         {
             if (ModelState.IsValid)
             {
-                AppUser? userToUpdate = _userService.FindById(id);
+                AppUser? userToUpdate = await _userService.FindById(id);
                 if(userToUpdate != null)
                 {
                     if (!_userService.IsUserNameTaken(dto.UserName))
@@ -86,7 +86,7 @@ namespace GamesAPI.Controllers
                     {
                         userToUpdate.PasswordHash = BC.HashPassword(dto.Password);
                     }
-                    _userService.SaveChanges();
+                    await _userService.SaveChanges();
                     return Ok();
                 }
                 return NotFound();

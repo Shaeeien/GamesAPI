@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GamesAPI.DTOs;
+using GamesAPI.DTOs.Roles;
 
 namespace GamesAPI.Validators
 {
