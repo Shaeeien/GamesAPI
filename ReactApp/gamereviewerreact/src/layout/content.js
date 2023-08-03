@@ -1,16 +1,10 @@
 import React from "react";
-import { Sidebar } from "./sidebar";
 import './index.css';
-import RegistrationForm from '../user/registrationform';
 
-export class Content extends React.Component{
-    constructor(props){
-        super(props);
-    }
+export function Content(data) {
+    console.log(data);
+    return <div className="content">                                
+        {data.data.map(d => <div>{d}</div>)}
+    </div>
 
-    render(){
-        return <div className="content">                                
-                
-        </div>
-    }   
 }

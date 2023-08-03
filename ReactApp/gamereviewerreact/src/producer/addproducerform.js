@@ -1,7 +1,7 @@
 import React from 'react';
 import {useState} from 'react';
-import axios, { Axios } from 'axios';
-import { json, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function AddProducerForm(){
     const navigate = useNavigate();

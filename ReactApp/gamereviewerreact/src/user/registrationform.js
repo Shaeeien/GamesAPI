@@ -1,26 +1,34 @@
 import React from "react";
-import { useState } from "react";
-import axios from "axios";
 import '../layout/index.css';
+import { useState } from 'react';
 
-export default class RegistrationForm extends React.Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            email : "",
-            password : "",
-            repeatPassword : ""
-        }        
+export default function RegistrationForm(){
+    const [showPassword, setShowPassword] = useState(false);
+    const [showRepeatPassword, setShowRepeatPassword] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [repeatPassword, setRepeatPassword] = useState("");
+
+
+    const TogglePassword = function () {
+        setShowPassword(!showPassword);
+        document.querySelector("#toggle-password").classList.toggle('fa-eye-slash');
     }
-    RegisterUser = async () =>{
+
+    const ToggleRepeatPassword = function () {
+        setShowRepeatPassword(!showRepeatPassword);
+        document.querySelector("#toggle-repeat-password").classList.toggle('fa-eye-slash');
+    }
+
+    const RegisterUser = async function (){
         const headers = {
             'Content-Type': 'application/json;charset=UTF-8',
             'Accept' : '*/*'
           }
         const userData = {
-            "Email" : this.email, 
-            "Password" : this.password, 
-            "ConfirmPassword" : this.repeatPassword, 
+            "Email" : email, 
+            "Password" : password, 
+            "ConfirmPassword" : repeatPassword, 
             "RoleId" : 0        
         }
         console.log(userData);
@@ -37,34 +45,22 @@ export default class RegistrationForm extends React.Component{
       );
     }
 
-    setEmail = (value) => {
-        this.email = value;
-        console.log(this.email);
-    }
-
-    setPassword = (value) => {
-        this.password = value;
-    }
-
-    setRepeatPassword = (value) => {
-        this.repeatPassword = value;
-    }
-
-    render(){
-        return <div id="registerform">
-        <form>
-            <label className="formLabel" htmlFor="email">Adres e-mail : </label>
-            <input className="formInput" type="text" onChange={(e) => this.setEmail(e.target.value)}/>
-            <br />
-            <label className="formLabel" htmlFor="password">Hasło : </label>
-            <input className="formInput" type="password" onChange={(e) => this.setPassword(e.target.value)}/>
-            <br />
-            <label className="formLabel" htmlFor="repeatPassword">Powtórz hasło : </label>
-            <input className="formInput" onChange={(e) => this.setRepeatPassword(e.target.value)}/>
-            <br />
-            <input type="button" value="Zarejestruj" onClick={() => this.RegisterUser()} />
-        </form>
-    </div>
-    }
+    return <div id="registerform">
+                <form>
+                    <label className="formLabel" htmlFor="email">Adres e-mail : </label>
+                    <input className="formInput" type="text" onChange={(e) => setEmail(e.target.value)}/>
+                    <br />
+                    <label className="formLabel" htmlFor="password">Hasło : </label>
+                    <input className="formInput" type={showPassword ? "text" : "password"} onChange={(e) => setPassword(e.target.value)} />
+                    <i class="far fa-eye" id="toggle-password" onClick={TogglePassword}></i>
+                    <br />
+                    <label className="formLabel" htmlFor="repeatPassword">Powtórz hasło : </label>
+                    <input className="formInput" type={showRepeatPassword ? "text" : "password"} onChange={(e) => setRepeatPassword(e.target.value)} />
+                    <i class="far fa-eye" id="toggle-repeat-password" onClick={ToggleRepeatPassword}></i>
+                    <br />
+                    <input type="button" value="Zarejestruj" onClick={() => RegisterUser()} />
+                </form>
+            </div>
+    
     
 }
