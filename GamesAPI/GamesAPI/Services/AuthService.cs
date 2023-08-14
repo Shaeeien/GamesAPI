@@ -14,10 +14,12 @@ namespace GamesAPI.Services
     {
         private readonly IUserService _userService;
         private readonly IConfiguration _configuration;
-        public AuthService(IUserService userService, IConfiguration configuration) 
+        private readonly ITokenService _tokenService;
+        public AuthService(IUserService userService, IConfiguration configuration, ITokenService tokenService)
         {
             _userService = userService;
             _configuration = configuration;
+            _tokenService = tokenService;
         }
 
         public async Task<bool> Login(LoginDTO dto)
@@ -28,9 +30,17 @@ namespace GamesAPI.Services
             return false;
         }
 
-        public void Logout()
+        public async Task<bool> Logout(string token)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _tokenService.RemoveJWT(token);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

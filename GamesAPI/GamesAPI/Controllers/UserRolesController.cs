@@ -1,12 +1,14 @@
 ﻿using GamesAPI.DTOs.UserRoles;
 using GamesAPI.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GamesAPI.Controllers
 {
     [ApiController]
+    [EnableCors("ReactApp")]
     [Route("/api/userroles")]
     public class UserRolesController : ControllerBase
     {

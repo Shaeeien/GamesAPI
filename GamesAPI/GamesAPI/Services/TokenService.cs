@@ -2,6 +2,7 @@
 using GamesAPI.Models;
 using GamesAPI.Responses;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,15 +16,21 @@ namespace GamesAPI.Services
     {
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
+        private readonly IUserTokenService _userTokenService;
+        private readonly ApplicationDbContext _context;
 
         public TokenService(IConfiguration configuration, 
-            IUserService userService)
+            IUserService userService,
+            IUserTokenService userTokenService,
+            ApplicationDbContext context)
         {
             _configuration = configuration;
             _userService = userService;
+            _userTokenService = userTokenService;
+            _context = context;
         }
 
-        public string GenerateJSONWebToken(AppUser userInfo, List<IdentityRole<int>> userRoles)
+        public async Task<string> GenerateJSONWebToken(AppUser userInfo, List<IdentityRole<int>> userRoles)
         {
             {
                 var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -31,7 +38,8 @@ namespace GamesAPI.Services
                 var claims = new List<Claim>
                 {
                     new Claim("id", userInfo.Id.ToString()),
-                    new Claim(ClaimTypes.Name, userInfo.UserName.ToString())
+                    new Claim(ClaimTypes.Name, userInfo.UserName),
+                    new Claim(ClaimTypes.Email, userInfo.Email)
                 };
                 foreach (IdentityRole<int> role in userRoles)
                 {
@@ -45,7 +53,10 @@ namespace GamesAPI.Services
                   expires: DateTime.Now.AddMinutes(20),
                   signingCredentials: credentials);
 
-                return new JwtSecurityTokenHandler().WriteToken(token);
+                string tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+                if (await SaveTokenInDatabase(userInfo, tokenString))
+                    return tokenString;
+                return null;
             }
         }
 
@@ -83,23 +94,23 @@ namespace GamesAPI.Services
             }
         }
 
-        public async Task<AuthenticationResponse?> RefreshToken(RefreshTokenDTO dto)
+        public async Task<AuthenticationResponse?> RefreshToken(string token)
         {
-            if (dto is null)
+            if (token is null)
             {
                 return null;
             }                
-            if (dto.Token != null)
+            if (token != null)
             {
-                var principal = GetPrincipalFromToken(dto.Token);
-                var userName = principal.Identity.Name;
+                var principal = GetPrincipalFromToken(token);
+                var userName = principal?.Identity?.Name;
 
                 var user = await _userService.FindByName(userName);
                 var roles = _userService.GetRolesByUser(user);
 
                 if (user != null)
                 {
-                    var newToken = GenerateJSONWebToken(user, roles);
+                    var newToken = await GenerateJSONWebToken(user, roles);
                     if(user.Expires < DateTime.Now)
                     {
                         var refreshTokenString = GenerateRefreshTokenString();
@@ -119,9 +130,48 @@ namespace GamesAPI.Services
             return null;
         }
 
-        public bool RemoveJWT(AppUser user)
+
+        public async Task<bool> SaveTokenInDatabase(AppUser userInfo, string token)
         {
-            throw new NotImplementedException();
+            try
+            {
+                IdentityUserToken<int>? tokenToRemove = await _context.UserTokens.Where(t => t.UserId == userInfo.Id).FirstOrDefaultAsync();
+                if (tokenToRemove != null)
+                {
+                    _context.UserTokens.Remove(tokenToRemove);
+                }
+                await _context.UserTokens.AddAsync(new IdentityUserToken<int>()
+                {
+                    UserId = userInfo.Id,
+                    LoginProvider = "localhost:5120",
+                    Name = userInfo.UserName,
+                    Value = token.ToString()
+                });
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> RemoveJWT(string token)
+        {
+            try
+            {
+                IdentityUserToken<int>? tokenToRemove = await _userTokenService.FindByUserTokenString(token);
+                if (tokenToRemove != null)
+                {
+                    await _userTokenService.Remove(tokenToRemove);
+                    return true;
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public bool ValidateToken(string token)

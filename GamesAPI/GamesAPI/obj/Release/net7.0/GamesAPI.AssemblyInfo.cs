@@ -18,6 +18,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyProductAttribute("GamesAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GamesAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("GamesApi.Tests")]
 
 // Wygenerowane przez klasę WriteCodeFragment programu MSBuild.
 

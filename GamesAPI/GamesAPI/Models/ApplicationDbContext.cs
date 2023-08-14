@@ -59,6 +59,8 @@ namespace GamesAPI.Models
             builder.Entity<IdentityUserRole<int>>().HasData(
                 new { UserId = 1, RoleId = 2 }
             );
+
+            
         }
 
         public DbSet<AppUser> Users { get; set; }

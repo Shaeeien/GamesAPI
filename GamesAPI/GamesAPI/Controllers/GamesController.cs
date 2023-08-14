@@ -2,12 +2,15 @@
 using GamesAPI.Models;
 using GamesAPI.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GamesAPI.Controllers
 {
     [Route("api/games")]
+    [EnableCors("ReactApp")]
     [ApiController]
     public class GamesController : ControllerBase
     {
@@ -35,7 +38,7 @@ namespace GamesAPI.Controllers
                 {
                     await _gamesService.Add(gameToAdd);
                     await _gamesService.SaveChanges();
-                    return Created("https://localhost:7054/api/games/add", gameToAdd);
+                    return Created(new Uri(Request.GetEncodedUrl()), gameToAdd);
                 }
                 catch
                 {

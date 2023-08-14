@@ -2,6 +2,8 @@
 using GamesAPI.Models;
 using GamesAPI.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using BC = BCrypt.Net.BCrypt;
 
@@ -9,6 +11,7 @@ namespace GamesAPI.Controllers
 {
     [ApiController]
     [Route("/api/user")]
+    [EnableCors("ReactApp")]
     [Authorize(Roles = "Admin")]
     public class UserController : ControllerBase
     {
@@ -35,7 +38,7 @@ namespace GamesAPI.Controllers
                     try                   
                     {
                         _userService.Add(userToAdd);
-                        return Created("https://localhost:7054/api/user/register", userToAdd);
+                        return Created(new Uri(Request.GetEncodedUrl()), userToAdd);
                     }
                     catch
                     {

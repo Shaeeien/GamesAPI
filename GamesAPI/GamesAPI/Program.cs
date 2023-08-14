@@ -28,7 +28,9 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserRolesService, UserRolesService>();
+builder.Services.AddScoped<IUserTokenService, UserTokenService>();
 builder.Services.AddScoped<IGamesService, GamesService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddControllers();
 builder.Services.AddFluentValidationAutoValidation();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -73,6 +75,15 @@ builder.Services.AddAuthorization(options =>
         defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();
 
     options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
+    //options.AddPolicy("CorrectUser", policy => policy.Requirements.Add());
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ReactApp", policy =>
+    {
+        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+    });
 });
 
 var app = builder.Build();
@@ -87,6 +98,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseRouting();
+app.UseCors("ReactApp");
 app.UseAuthorization();
 app.MapControllers();
 
