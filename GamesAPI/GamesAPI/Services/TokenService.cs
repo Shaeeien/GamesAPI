@@ -174,6 +174,11 @@ namespace GamesAPI.Services
             }
         }
 
+        /// <summary>
+        /// SPRAWDZIĆ, CZY JEST W BAZIE!
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         public bool ValidateToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();

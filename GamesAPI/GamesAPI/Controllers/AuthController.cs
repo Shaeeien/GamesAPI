@@ -95,23 +95,32 @@ namespace GamesAPI.Controllers
             return BadRequest("Cannot refresh token");
         }
 
+        /// <summary>
+        /// SPRAWDZIĆ, CZY TOKEN JEST W BAZIE!
+        /// </summary>
+        /// <returns></returns>
         [HttpPost("validate")]
         public async Task<ActionResult> IsTokenValid()
         {
             var token = await HttpContext.GetTokenAsync("access_token");
             if (token != null)
             {
-                try
+                if (await _userTokenService.FindByUserTokenString(token) != null)
                 {
-                    _tokenService.ValidateToken(token);
-                    return Ok();
-                }
-                catch
-                {
-                    return Unauthorized("Token is not valid");
+                
+                    try
+                    {
+                        _tokenService.ValidateToken(token);
+                        return Ok();
+                    }
+                    catch
+                    {
+                        return Unauthorized("Token is not valid");
+                    }
                 }
             }
-            return Unauthorized();
+            
+            return Unauthorized("Token does not exist in database");
         }
 
         [HttpPost("logout")]
